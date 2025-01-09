@@ -53,7 +53,7 @@ This is a Sticky Notes Web Application built with React, Node.js, Express.js, an
     ```
 
 ## Screenshots:
-*(Add relevant screenshots here)*
+---------------
 
 ## Contributing:
 Feel free to fork the repository, create branches, and submit pull requests. Contributions are welcome!
