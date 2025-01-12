@@ -50,6 +50,7 @@
       cursor: pointer;
       font-size: 16px;
       transition: background-color 0.3s;
+      font-weight: bold;
   
       &:hover {
         background-color: #004f6d;
@@ -58,13 +59,14 @@
     .links {
       text-align: center;
       margin-top: 10px;
-  
+      
       button {
         background: none;
         border: none;
         color: #006496;
         cursor: pointer;
         text-decoration: underline;
+        font-weight: normal;
       }
     }
   }
