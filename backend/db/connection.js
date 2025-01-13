@@ -5,7 +5,8 @@ const connection = mysql.createConnection({
   host: 'localhost',       
   user: 'root',           
   password: '',
-  database: 'sticky_notes'
+  database: 'sticky_notes_app',
+  port: 4306,
 });
 
 // Connect to the database

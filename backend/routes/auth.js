@@ -8,7 +8,7 @@ const router = express.Router();
 // Middleware to handle sessions
 router.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: "f4e5e2f57c8f9a63b7d9c61d8f93e4d3f59f2d8d39c1c8d8f9c3b7a6b1b2a9f9",
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -21,6 +21,7 @@ router.use(
 
 // User registration
 router.post('/register', async (req, res) => {
+  console.log(req.body);
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -36,7 +37,8 @@ router.post('/register', async (req, res) => {
       }
 
       if (result.length > 0) {
-        return res.status(400).json({ error: 'User already exists' });
+        console.log('User already exists')
+        return res.status(200).json({ error: 'User already exists' });
       }
 
       // Hash the password
@@ -44,7 +46,7 @@ router.post('/register', async (req, res) => {
 
       // Insert the user into the database
       db.query(
-        'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+        'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
         [username, email, hashedPassword],
         (err) => {
           if (err) {
@@ -63,6 +65,7 @@ router.post('/register', async (req, res) => {
 
 // User login
 router.post('/login', (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -103,6 +106,87 @@ router.post('/logout', (req, res) => {
     res.clearCookie('connect.sid');
     res.status(200).json({ message: 'Logout successful' });
   });
+});
+
+
+// Forgot Password
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: 'Email is required' });
+
+  try {
+    const userQuery = 'SELECT * FROM users WHERE email = ?';
+    const [user] = await db.promise().query(userQuery, [email]);
+
+    if (user.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    const tokenExpiration = new Date(Date.now() + 60 * 60 * 1000); // 1 hour expiration
+
+    const updateQuery = `
+      UPDATE users SET resetToken = ?, resetTokenExpires = ? WHERE email = ?
+    `;
+    await db.promise().query(updateQuery, [hashedToken, tokenExpiration, email]);
+
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset Request',
+      html: `<p>You requested to reset your password. Click <a href="${resetLink}">here</a> to reset it. This link will expire in 1 hour.</p>`,
+    });
+
+    res.status(200).json({ message: 'Password reset link sent to your email' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred' });
+  }
+});
+
+// Reset Password
+router.post('/reset-password/', async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  if (!token || !newPassword) {
+    return res.status(400).json({ message: 'Token and new password are required' });
+  }
+
+  try {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    const userQuery = `
+      SELECT * FROM users WHERE resetToken = ? AND resetTokenExpires > NOW()
+    `;
+    const [user] = await db.promise().query(userQuery, [hashedToken]);
+
+    if (user.length === 0) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const updateQuery = `
+      UPDATE users SET password = ?, resetToken = NULL, resetTokenExpires = NULL WHERE id = ?
+    `;
+    await db.promise().query(updateQuery, [hashedPassword, user[0].id]);
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred' });
+  }
 });
 
 // Check session

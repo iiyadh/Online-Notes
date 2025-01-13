@@ -1,25 +1,48 @@
 import React, { useState } from 'react';
 import './styles/SignUp.scss';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify'; // Import toast from react-toastify
+import axios from 'axios';
 
 const SignUp = () => {
+
+  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.withCredentials = true;
+
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      toast.warning("Passwords don't match");
       return;
     }
     // Add sign-up logic here
-    console.log('Signing up with:', email, password);
-    // Optionally navigate to login after successful sign-up
-    // navigate('/login');
+    try {
+      const res = await axios.post("http://localhost:3000/auth/register", {
+        username,
+        email,
+        password
+      }, {
+        withCredentials: true
+      });
+  
+      if (res.status === 201) {
+        toast.success('Sign-up finished successfully');
+        navigate('/login');
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (err) {
+      toast.error("Server problem");
+      console.error(err); // Log the error for debugging
+    }
   };
+  
 
   return (
     <div className="signup-container">

@@ -1,21 +1,38 @@
 import React, { useState } from 'react';
 import './styles/Login.scss';
 import ForgotPassword from './ForgotPassword';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Login = () => {
+  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.withCredentials = true;
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add login logic here
-    console.log('Logging in with:', email, password);
+    
+    try {
+      // Add login logic here
+      const res = await axios.post("http://localhost:3000/auth/login", { email, password }, { withCredentials: true });
+  
+      if (res.status === 200) {
+        toast.success('Login finished successfully');
+        navigate('/dashboard');
+      } else {
+        toast.warning('Something went wrong');
+      }
+    } catch (err) {
+      toast.error('Server problem');
+      console.error(err); // Log the error for debugging
+    }
   };
+  
 
   return (
     <>
@@ -50,16 +67,6 @@ const Login = () => {
       </div>
     </div>}
     {showForgotPassword && <ForgotPassword setShowForgotPassword={setShowForgotPassword} />}
-    <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-      />
     </>
   );
 };

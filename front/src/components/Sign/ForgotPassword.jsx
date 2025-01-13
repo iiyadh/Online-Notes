@@ -9,6 +9,7 @@ const ForgotPassword = ({ setShowForgotPassword }) => {
     e.preventDefault();
     // Add forgot password logic here (for now, it's just a log)
     console.log('Password reset link sent to:', email);
+    
 
     // Display success toast notification
     toast.success('A password reset link has been sent to your email!');

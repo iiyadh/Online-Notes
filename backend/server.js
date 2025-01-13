@@ -6,7 +6,10 @@ const authRoutes = require('./routes/auth');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow all origins
+  credentials: true, // Allow sending cookies
+}));
 app.use(bodyParser.json());
 
 // Routes

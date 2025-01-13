@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./styles/ResetPassword.scss";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 
 const ResetPassword = () => {
