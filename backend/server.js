@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const notesRoutes = require('./routes/notes');
 const authRoutes = require('./routes/auth');
+const settingsRoutes = require("./routes/settings");
 const app = express();
 
 // Middleware
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 // Routes
 app.use('/notes', notesRoutes); // Notes routes
 app.use('/auth', authRoutes);   // Authentication routes 
+app.use('/settings', settingsRoutes);   // Authentication routes 
 
 // Error handling middleware
 app.use((err, req, res, next) => {
