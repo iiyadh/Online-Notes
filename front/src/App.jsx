@@ -3,7 +3,8 @@ import './index.scss';
 import './App.scss';
 import SignUp from './components/Sign/SignUp'
 import Login from './components/Sign/Login'
-import NotesApp from './components/Notes/NotesApp'
+import NotesApp from './components/Notes/NotesApp';
+import SettingsPage from './components/Settings/SettingsPage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ResetPassword from './components/Sign/ResetPassword'
 import { ToastContainer } from 'react-toastify';
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path='/reset-password' element={<ResetPassword/>}></Route>
         <Route path='/dashboard' element={<NotesApp/>}></Route>
+        <Route path='/settings' element={<SettingsPage/>}></Route>
       </Routes>
       <ToastContainer
         position="top-right"
