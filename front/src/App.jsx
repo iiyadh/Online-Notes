@@ -9,18 +9,21 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ResetPassword from './components/Sign/ResetPassword'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoute from './Guards/ProtectedRoute';
+import AuthProvider from './Context/AuthContext';
 
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path='/reset-password' element={<ResetPassword/>}></Route>
-        <Route path='/dashboard' element={<NotesApp/>}></Route>
-        <Route path='/settings' element={<SettingsPage/>}></Route>
+        <Route path='/reset-password' element={<ResetPassword/>}/>
+        <Route path='/dashboard' element={<ProtectedRoute><NotesApp/></ProtectedRoute>}/>
+        <Route path='/settings' element={<ProtectedRoute><SettingsPage/></ProtectedRoute>}/>
       </Routes>
       <ToastContainer
         position="top-right"
@@ -33,6 +36,7 @@ function App() {
         draggable
       />
     </Router>
+    </AuthProvider>
   )
 }
 
