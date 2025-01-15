@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './styles/SettingsPage.scss';
+import { useNavigate } from 'react-router-dom';
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('account');
+  const navigate = useNavigate();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -45,6 +47,9 @@ const SettingsPage = () => {
 
   return (
     <div className="settings-container">
+      <button className="back-button" onClick={() => navigate('/dashboard')}>
+        &larr;
+      </button>
       <h1 className="settings-title">Settings</h1>
       <div className="settings-menu">
         <button

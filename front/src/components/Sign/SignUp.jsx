@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './styles/SignUp.scss';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'; // Import toast from react-toastify
 import axios from 'axios';
+import { useAuth } from '../../Context/AuthContext';
 
 const SignUp = () => {
 
@@ -14,6 +15,13 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  useEffect(() => {
+      if (user) {
+        navigate('/dashboard');
+      }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/Login.scss';
 import ForgotPassword from './ForgotPassword';
+import { useAuth } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -12,24 +13,45 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const { login ,user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+  
+  // ****** Don't use Internal implementation for the login make sure you use the context ********** //
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+    
+  //   try {
+  //     // Add login logic here
+  //     const res = await axios.post("http://localhost:3000/auth/login", { email, password }, { withCredentials: true });
+  
+  //     if (res.status === 200) {
+  //       toast.success('Login finished successfully');
+  //       navigate('/dashboard');
+  //     } else {
+  //       toast.warning('Something went wrong');
+  //     }
+  //   } catch (err) {
+  //     toast.error('Server problem');
+  //     console.error(err); // Log the error for debugging
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
-      // Add login logic here
-      const res = await axios.post("http://localhost:3000/auth/login", { email, password }, { withCredentials: true });
-  
-      if (res.status === 200) {
-        toast.success('Login finished successfully');
-        navigate('/dashboard');
-      } else {
-        toast.warning('Something went wrong');
-      }
+      await login(email, password); // Use the login function
+      toast.success('Login successful');
+      navigate('/dashboard');
     } catch (err) {
-      toast.error('Server problem');
-      console.error(err); // Log the error for debugging
+      toast.error('Invalid credentials or server error');
+      console.error(err);
     }
   };
   

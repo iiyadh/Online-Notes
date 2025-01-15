@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import Editor from "./Editor";
 import UserProfile from "./UserProfile";
 import "./styles/NotesApp.scss";
+import {useAuth} from '../../Context/AuthContext';
 
 const NotesApp = () => {
   const [notes, setNotes] = useState([
@@ -11,6 +12,7 @@ const NotesApp = () => {
   ]);
   const [selectedNote, setSelectedNote] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const {user} = useAuth();
 
   const handleAddNote = () => {
     const newNote = {
@@ -46,10 +48,7 @@ const NotesApp = () => {
         setIsEditMode={setIsEditMode}
       />
       <UserProfile
-        user={{
-          name: "John Doe",
-          profilePicture: "https://via.placeholder.com/150",
-        }}
+        user={user}
       />
     </div>
   );

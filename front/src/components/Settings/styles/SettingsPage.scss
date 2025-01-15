@@ -6,7 +6,20 @@
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
     color: #cccccc;
-  
+    
+    .back-button {
+      border: none;
+      background: transparent;
+      color: black;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .back-button:hover {
+      background-color: #0099e6;
+    }
+
     .settings-title {
       text-align: center;
       font-size: 2rem;
