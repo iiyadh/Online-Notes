@@ -91,7 +91,7 @@ router.post('/login', (req, res) => {
     }
 
     // Save user info in session
-    req.session.user = { id: user.id, username: user.username, email: user.email };
+    req.session.user = { id: user.id, username: user.name, email: user.email };
     res.status(200).json({ message: 'Login successful', user: req.session.user });
   });
 });
