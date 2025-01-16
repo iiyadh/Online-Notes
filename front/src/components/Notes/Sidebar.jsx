@@ -4,7 +4,6 @@ import { useNotes } from "../../Context/NoteContext";
 
 const Sidebar = ({ isEditMode }) => {
   const { notes, selectedNote, setSelectedNote, addNote } = useNotes();
-  console.log(notes);
   return (
     <div className="sidebar">
       <button

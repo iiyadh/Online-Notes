@@ -6,7 +6,7 @@ const db = require('../db/connection');
 router.get('/:userId', (req, res) => {
   const { userId } = req.params;
 
-  db.query('SELECT * FROM notes WHERE user_id = ? ORDER BY updated_at,created_at', [userId], (err, results) => {
+  db.query('SELECT * FROM notes WHERE user_id = ? ORDER BY updated_at DESC', [userId], (err, results) => {
     if (err) {
       console.error('Error fetching notes:', err.message);
       return res.status(500).json({ error: 'Failed to fetch notes' });

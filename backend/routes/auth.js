@@ -23,11 +23,9 @@ router.use(
 router.post('/register', async (req, res) => {
   console.log(req.body);
   const { username, email, password } = req.body;
-
   if (!username || !email || !password) {
     return res.status(400).json({ error: 'All fields are required' });
   }
-
   try {
     // Check if the user already exists
     db.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
@@ -40,7 +38,6 @@ router.post('/register', async (req, res) => {
         console.log('User already exists')
         return res.status(200).json({ error: 'User already exists' });
       }
-
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -81,9 +78,7 @@ router.post('/login', (req, res) => {
     if (result.length === 0) {
       return res.status(400).json({ error: 'Invalid email or password' });
     }
-
     const user = result[0];
-
     // Compare the password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {

@@ -32,7 +32,7 @@ export  const NoteProvider = ({ children }) => {
         content,
         user_id: user.id,
       });
-      setNotes((prevNotes) => [...prevNotes, {id:res.data.id ,title, content }]);
+      setNotes((prevNotes) => [{id:res.data.id ,title, content },...prevNotes,]);
     } catch (err) {
       console.error("Error adding note:", err.message);
     }
