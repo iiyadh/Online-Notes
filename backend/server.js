@@ -5,6 +5,22 @@ const notesRoutes = require('./routes/notes');
 const authRoutes = require('./routes/auth');
 const settingsRoutes = require("./routes/settings");
 const app = express();
+const session = require('express-session');
+
+
+// Middleware to handle sessions
+app.use(
+  session({
+    secret: "f4e5e2f57c8f9a63b7d9c61d8f93e4d3f59f2d8d39c1c8d8f9c3b7a6b1b2a9f9",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
 // Middleware
 app.use(cors({
