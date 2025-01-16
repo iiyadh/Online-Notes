@@ -49,7 +49,7 @@ This is a Sticky Notes Web Application built with React, Node.js, Express.js, an
 4. Set up the .env file with necessary environment variables (e.g., database connection, session secret, etc.).
 5. Start the backend server:
     ```bash
-    node server.js
+    npm start
     ```
 
 ## Screenshots:
