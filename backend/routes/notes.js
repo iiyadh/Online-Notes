@@ -6,7 +6,7 @@ const db = require('../db/connection');
 router.get('/:userId', (req, res) => {
   const { userId } = req.params;
 
-  db.query('SELECT * FROM notes WHERE user_id = ?', [userId], (err, results) => {
+  db.query('SELECT * FROM notes WHERE user_id = ? ORDER BY updated_at,created_at', [userId], (err, results) => {
     if (err) {
       console.error('Error fetching notes:', err.message);
       return res.status(500).json({ error: 'Failed to fetch notes' });
@@ -17,23 +17,17 @@ router.get('/:userId', (req, res) => {
 
 // Add a new note
 router.post('/', (req, res) => {
-  const { title, content, user_id } = req.body;
-
-  if (!title || !content || !user_id) {
-    return res.status(400).json({ error: 'Title, content, and user_id are required' });
-  }
-
-  db.query(
-    'INSERT INTO notes (title, content, user_id) VALUES (?, ?, ?)',
-    [title, content, user_id],
-    (err, result) => {
-      if (err) {
-        console.error('Error adding note:', err.message);
-        return res.status(500).json({ error: 'Failed to add note' });
+  console.log(req.body);
+  db.query('INSERT INTO notes (title, content, user_id) VALUES (?, ?, ?)',
+    [req.body.title,req.body.content,req.body. user_id],
+    (err, results) => {
+      if(err){
+        res.status(500).json("Mysql Server Error");
+      }else{
+        res.status(201).json({ id: results.insertId });
       }
-      res.status(201).json({ id: result.insertId });
     }
-  );
+  )
 });
 
 // Edit a note
