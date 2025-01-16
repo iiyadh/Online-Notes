@@ -1,36 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Editor from "./Editor";
 import UserProfile from "./UserProfile";
 import "./styles/NotesApp.scss";
-import {useAuth} from '../../Context/AuthContext';
+import { useAuth } from "../../Context/AuthContext";
+import { useNotes } from "../../Context/NoteContext";
 
 const NotesApp = () => {
-  const [notes, setNotes] = useState([
-    { id: 1, title: "First Note", content: "This is the first note." },
-    { id: 2, title: "Second Note", content: "This is the second note." },
-  ]);
-  const [selectedNote, setSelectedNote] = useState(null);
+  const { user } = useAuth();
+  const {
+    notes,
+    selectedNote,
+    setSelectedNote,
+    addNote,
+  } = useNotes();
   const [isEditMode, setIsEditMode] = useState(false);
-  const {user} = useAuth();
 
-  const handleAddNote = () => {
+  const handleAddNote = async() => {
     const newNote = {
-      id: notes.length + 1,
-      title: `New Note ${notes.length + 1}`,
+      title: "Untitled Note",
       content: "",
-    }; 
-    setNotes([...notes, newNote]);
-    setSelectedNote(newNote);
+    };
+    await addNote(newNote.title, newNote.content);
   };
+  useEffect(()=>{
+    setSelectedNote(null);
+  },[]);
 
-  const handleSaveNote = (updatedNote) => {
-    setNotes((prevNotes) =>
-      prevNotes.map((note) =>
-        note.id === updatedNote.id ? updatedNote : note
-      )
-    );
-  };
   return (
     <div className="notes-app">
       <Sidebar
@@ -43,13 +39,10 @@ const NotesApp = () => {
       <Editor
         selectedNote={selectedNote}
         setSelectedNote={setSelectedNote}
-        handleSaveNote={handleSaveNote}
         isEditMode={isEditMode}
         setIsEditMode={setIsEditMode}
       />
-      <UserProfile
-        user={user}
-      />
+      <UserProfile user={user} />
     </div>
   );
 };

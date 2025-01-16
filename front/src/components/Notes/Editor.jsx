@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import Quill's CSS
 import "./styles/Editor.scss";
+import { useNotes } from "../../Context/NoteContext";
 
-const Editor = ({ selectedNote, setSelectedNote, handleSaveNote,isEditMode, setIsEditMode}) => {
+const Editor = ({ isEditMode, setIsEditMode }) => {
+  const { selectedNote, setSelectedNote, updateNote, addNote, deleteNote } = useNotes();
 
   const modules = {
     toolbar: [
-      [{ 'font': [] }],
-      [{ 'size': ['small', 'normal', 'large', 'huge'] }],
-      ['bold', 'italic', 'underline'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link'],
-      [{ 'align': [] }],
-      [{ 'color': [] }, { 'background': [] }],
-      ['blockquote', 'code-block'],
+      [{ font: [] }],
+      [{ size: ["small", "normal", "large", "huge"] }],
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link"],
+      [{ align: [] }],
+      [{ color: [] }, { background: [] }],
+      ["blockquote", "code-block"],
     ],
   };
 
@@ -23,27 +25,39 @@ const Editor = ({ selectedNote, setSelectedNote, handleSaveNote,isEditMode, setI
   }
 
   const handleSave = () => {
-    handleSaveNote(selectedNote);
+    if (selectedNote.id) {
+      updateNote(selectedNote.id, selectedNote.title, selectedNote.content);
+    } else {
+      addNote(selectedNote.title, selectedNote.content);
+    }
     setIsEditMode(false);
   };
 
+  const handleDelete = () =>{
+    deleteNote(selectedNote.id);
+    setSelectedNote(null);
+  }
+
   return (
     <div className="editor">
-      {/* Buttons for toggling modes */}
       <div className="mode-buttons">
         {!isEditMode && (
-          <button className="edit-button" onClick={() =>{ setIsEditMode(true)}}>
+          <div className="btns">
+          <button className="edit-button" onClick={() => setIsEditMode(true)}>
             Edit
           </button>
+          <button className="delete-button" onClick={handleDelete}>
+            Delete
+          </button>
+          </div>
         )}
         {isEditMode && (
-          <button className="save-button" onClick={()=> {handleSave()}}>
+          <button className="save-button" onClick={handleSave}>
             Save
           </button>
         )}
       </div>
 
-      {/* Content Area */}
       {isEditMode ? (
         <div className="editor-content">
           <input
@@ -58,7 +72,7 @@ const Editor = ({ selectedNote, setSelectedNote, handleSaveNote,isEditMode, setI
             onChange={(content) => setSelectedNote({ ...selectedNote, content })}
             placeholder="Write your note here..."
             className="content-editor"
-            theme="snow" 
+            theme="snow"
             modules={modules}
           />
         </div>

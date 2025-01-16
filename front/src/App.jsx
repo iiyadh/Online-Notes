@@ -11,11 +11,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './Guards/ProtectedRoute';
 import AuthProvider from './Context/AuthContext';
+import NoteProvider from './Context/NoteContext';
 
 
 function App() {
   return (
     <AuthProvider>
+    <NoteProvider>
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -36,7 +38,9 @@ function App() {
         draggable
       />
     </Router>
+    </NoteProvider>
     </AuthProvider>
+    
   )
 }
 

@@ -28,6 +28,11 @@
     font-weight: bold;
   }
 
+  .btns{
+    display: flex;
+    width: 200px;
+    justify-content: space-around;
+  }
   .edit-button {
     background-color: #007bff;
     color: white;
@@ -41,6 +46,30 @@
     color: white;
     &:hover {
       background-color: #218838;
+    }
+  }
+
+  .delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+  
+    &:hover {
+      background-color: #c82333;
+    }
+  
+    &:focus {
+      outline: none;
+    }
+  
+    &:active {
+      background-color: #bd2130;
     }
   }
 }
