@@ -7,11 +7,8 @@ const db = require('../db/connection');
 // Change Password
 router.put('/password', async (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  if (!currentPassword || !newPassword) {
-    return res.status(400).json({ message: 'Both current and new passwords are required' });
-  }
   try {
-    const userId = req.session.userId;
+    const userId = req.session.user.id;
     // Fetch the current password from the database
     const [rows] = await db.promise().query('SELECT password FROM users WHERE id = ?', [userId]);
     if (rows.length === 0) {
