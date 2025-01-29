@@ -1,28 +1,31 @@
 import React, { useState } from "react";
 import "./styles/ResetPassword.scss";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const ResetPassword = () => {
+  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.withCredentials = true;
+
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const {token} = useParams();
 
   const handleSubmit = async (e) => {
+    console.log(token);
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match.");
       return;
     }
-
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("/api/auth/reset-password", {
+      const response = await axios.post("/auth/reset-password", {
         token,
         newPassword,
       });

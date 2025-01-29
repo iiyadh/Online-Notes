@@ -1,6 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const db = require('../db/connection');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const router = express.Router();
 
@@ -121,7 +124,7 @@ router.post('/forgot-password', async (req, res) => {
       },
     });
 
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
@@ -138,8 +141,9 @@ router.post('/forgot-password', async (req, res) => {
 });
 
 // Reset Password
-router.post('/reset-password/', async (req, res) => {
+router.post('/reset-password', async (req, res) => {
   const { token, newPassword } = req.body;
+  console.log(req.body);
 
   if (!token || !newPassword) {
     return res.status(400).json({ message: 'Token and new password are required' });

@@ -23,7 +23,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path='/reset-password' element={<ResetPassword/>}/>
+        <Route path='/reset-password/:token' element={<ResetPassword/>}/>
         <Route path='/dashboard' element={<ProtectedRoute><NotesApp/></ProtectedRoute>}/>
         <Route path='/settings' element={<ProtectedRoute><SettingsPage/></ProtectedRoute>}/>
       </Routes>
