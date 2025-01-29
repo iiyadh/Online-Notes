@@ -8,6 +8,7 @@ import { useAuth } from '../../Context/AuthContext';
 const UserProfile = ({ user }) => {
   axios.defaults.baseURL = "http://localhost:3000";
   axios.defaults.withCredentials = true;
+  
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { logout } = useAuth();

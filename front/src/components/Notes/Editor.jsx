@@ -37,7 +37,6 @@ const Editor = ({ isEditMode, setIsEditMode }) => {
     deleteNote(selectedNote.id);
     setSelectedNote(null);
   }
-
   return (
     <div className="editor">
       <div className="mode-buttons">
