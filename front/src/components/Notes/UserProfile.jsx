@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../Context/AuthContext';
 
 
-const UserProfile = ({ user }) => {
+const UserProfile = ({ user , openedProfile}) => {
   axios.defaults.baseURL = "http://localhost:3000";
   axios.defaults.withCredentials = true;
   
@@ -23,7 +23,7 @@ const UserProfile = ({ user }) => {
   };
 
   return (
-    <div className="user-profile">
+    <div className={`user-profile ${openedProfile ? 'openProf':''}`}>
       <div className="profile-header">
         <img src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${user.username}&flip=true&backgroundColor=0a5b83,1c799f,69d2e7,f1f4dc,f88c49,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&backgroundType=solid,gradientLinear&backgroundRotation=0,10,20&shapeColor=0a5b83,1c799f,69d2e7,f1f4dc,f88c49,transparent`} alt={`${user.name}'s Profile`} />
         <h2>{user.username}</h2>

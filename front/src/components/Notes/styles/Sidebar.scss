@@ -1,6 +1,6 @@
 .sidebar {
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: #f9f9f9;
   flex:1;
 
   .add-note {
@@ -27,7 +27,13 @@
       &.active {
         background-color: #007bff;
         color: white;
-      }
+      } 
+    }
+  }
+  @media (max-width: 768px) {
+    .note-list {
+      max-height: 150px;
+      overflow-y: auto;
     }
   }
 }

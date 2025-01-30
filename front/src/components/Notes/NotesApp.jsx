@@ -15,6 +15,7 @@ const NotesApp = () => {
     addNote,
   } = useNotes();
   const [isEditMode, setIsEditMode] = useState(false);
+  const [openedProfile,setOpenedProfile] = useState(false);
 
   const handleAddNote = async() => {
     const newNote = {
@@ -23,6 +24,10 @@ const NotesApp = () => {
     };
     await addNote(newNote.title, newNote.content);
   };
+
+  const handleOpenSide = () => {
+    setOpenedProfile(!openedProfile);
+  }
   useEffect(()=>{
     setSelectedNote(null);
   },[]);
@@ -42,7 +47,11 @@ const NotesApp = () => {
         isEditMode={isEditMode}
         setIsEditMode={setIsEditMode}
       />
-      <UserProfile user={user} />
+      <button className="btn-side" onClick={handleOpenSide}>{openedProfile ? "▶":"◀"}</button>
+      <UserProfile
+        openedProfile={openedProfile}
+        user={user} 
+      />
     </div>
   );
 };
