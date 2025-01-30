@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const ResetPassword = () => {
-  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL;
   axios.defaults.withCredentials = true;
 
   const [newPassword, setNewPassword] = useState("");

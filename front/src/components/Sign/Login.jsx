@@ -7,7 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL;
   axios.defaults.withCredentials = true;
 
   const [email, setEmail] = useState('');

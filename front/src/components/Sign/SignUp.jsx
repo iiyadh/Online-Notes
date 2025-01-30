@@ -7,7 +7,7 @@ import { useAuth } from '../../Context/AuthContext';
 
 const SignUp = () => {
 
-  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL;
   axios.defaults.withCredentials = true;
 
   const [email, setEmail] = useState('');
@@ -31,7 +31,7 @@ const SignUp = () => {
     }
     // Add sign-up logic here
     try {
-      const res = await axios.post("http://localhost:3000/auth/register", {
+      const res = await axios.post("/auth/register", {
         username,
         email,
         password

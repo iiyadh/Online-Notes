@@ -1,12 +1,13 @@
 const mysql = require('mysql2');
+require('dotenv').config();
 
 // Create a single connection
 const connection = mysql.createConnection({
-  host: 'localhost',       
-  user: 'root',           
-  password: '',
-  database: 'sticky_notes_app',
-  port: 4306,
+  host: process.env.HOST,       
+  user: process.env.USER,           
+  password: process.env.PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
 });
 
 // Connect to the database

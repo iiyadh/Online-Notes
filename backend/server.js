@@ -6,12 +6,13 @@ const authRoutes = require('./routes/auth');
 const settingsRoutes = require("./routes/settings");
 const app = express();
 const session = require('express-session');
+require('dotenv').config();
 
 
 // Middleware to handle sessions
 app.use(
   session({
-    secret: "f4e5e2f57c8f9a63b7d9c61d8f93e4d3f59f2d8d39c1c8d8f9c3b7a6b1b2a9f9",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -24,7 +25,7 @@ app.use(
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow all origins
+  origin: process.env.FRONTEND_URL, // Allow all origins
   credentials: true, // Allow sending cookies
 }));
 app.use(bodyParser.json());
