@@ -35,11 +35,11 @@ app.use('/notes', notesRoutes); // Notes routes
 app.use('/auth', authRoutes);   // Authentication routes 
 app.use('/settings', settingsRoutes);   // Authentication routes 
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send({ error: 'Something went wrong!' });
-});
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).send({ error: 'Something went wrong!' });
+// });
 
 // Start the server
 const PORT = process.env.PORT || 3000;
