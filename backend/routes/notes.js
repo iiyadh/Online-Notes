@@ -9,7 +9,7 @@ router.get('/:userId', (req, res) => {
   db.query('SELECT * FROM notes WHERE user_id = ? ORDER BY updated_at DESC', [userId], (err, results) => {
     if (err) {
       console.error('Error fetching notes:', err.message);
-      return res.status(500).json({ error: 'Failed to fetch notes' });
+      return res.status(500).json({ error: err });
     }
     res.json(results);
   });
