@@ -18,7 +18,7 @@ function App() {
   return (
     <AuthProvider>
     <NoteProvider>
-    <Router>
+    <Router basename="/">
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-up" element={<SignUp />} />
