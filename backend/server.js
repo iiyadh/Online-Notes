@@ -9,25 +9,30 @@ const session = require('express-session');
 require('dotenv').config();
 
 
-// Middleware to handle sessions
+// ✅ Middleware: Secure Sessions
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
+      secure: process.env.NODE_ENV === "production", // Secure cookies in production (requires HTTPS)
+      httpOnly: true, // Prevents JavaScript access
+      sameSite: "none", // Required for cross-origin cookies
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
 
-// Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL, // Allow all origins
-  credentials: true, // Allow sending cookies
-}));
+// ✅ Middleware: CORS
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "https://online-notes-client.vercel.app",
+    methods: "GET, POST, PUT, DELETE, OPTIONS",
+    credentials: true, // Allow sending cookies & sessions
+  })
+);
+app.options("*", cors()); // Handles preflight requests
 app.use(bodyParser.json());
 
 // Routes

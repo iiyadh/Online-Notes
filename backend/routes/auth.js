@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
     db.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
       if (err) {
         console.error('Error checking user:', err);
-        return res.status(500).json({ error: 'Database error' });
+        return res.status(500).json({ error: err });
       }
 
       if (result.length > 0) {
@@ -37,7 +37,7 @@ router.post('/register', async (req, res) => {
         (err) => {
           if (err) {
             console.error('Error registering user:', err);
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ error: err });
           }
           res.status(201).json({ message: 'User registered successfully' });
         }
@@ -45,7 +45,7 @@ router.post('/register', async (req, res) => {
     });
   } catch (err) {
     console.error('Error registering user:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -61,7 +61,7 @@ router.post('/login', (req, res) => {
   db.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
     if (err) {
       console.error('Error fetching user:', err);
-      return res.status(500).json({ error: 'Database error' });
+      return res.status(500).json({ error: err });
     }
 
     if (result.length === 0) {
