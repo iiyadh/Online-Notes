@@ -65,13 +65,13 @@ router.post('/login', (req, res) => {
     }
 
     if (result.length === 0) {
-      return res.status(400).json({ error: 'Invalid email or password' });
+      return res.status(400).json({ error: 'Invalid email' });
     }
     const user = result[0];
     // Compare the password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return res.status(400).json({ error: 'Invalid email or password' });
+      return res.status(400).json({ error: 'Invalid password' });
     }
 
     // Save user info in session

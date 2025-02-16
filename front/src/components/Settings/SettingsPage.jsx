@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './styles/SettingsPage.scss';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { FiArrowLeft, FiLock, FiUser } from 'react-icons/fi';
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('account');
@@ -9,8 +11,6 @@ const SettingsPage = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
   axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -21,16 +21,15 @@ const SettingsPage = () => {
     e.preventDefault();
 
     if (!username) {
-      setError('Username cannot be empty');
+      toast.warn('Username cannot be empty');
       return;
     }
 
     try {
       const response = await axios.put('/settings/username', { newUsername: username }, { withCredentials: true });
-      setSuccess(response.data.message);
-      setError('');
+      toast.success(response.data.message);
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred while updating the username');
+      toast.warn(err.response?.data?.message);
     }
   };
 
@@ -38,12 +37,12 @@ const SettingsPage = () => {
     e.preventDefault();
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setError('All password fields are required');
+      toast.warn('All password fields are required');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      toast.warn('New passwords do not match');
       return;
     }
 
@@ -53,10 +52,9 @@ const SettingsPage = () => {
         { currentPassword, newPassword },
         { withCredentials: true }
       );
-      setSuccess(response.data.message);
-      setError('');
+      toast.success(response.data.message);
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred while updating the password');
+      toast.warn(err.response?.data?.message);
     }
   };
 
@@ -126,26 +124,33 @@ const SettingsPage = () => {
   return (
     <div className="settings-container">
       <button className="back-button" onClick={() => navigate('/dashboard')}>
-        &larr;
+        <FiArrowLeft className="icon" />
+        Back to Dashboard
       </button>
-      <h1 className="settings-title">Settings</h1>
+      
+      <header className="settings-header">
+        <h1 className="settings-title">Account Settings</h1>
+        <p className="settings-subtitle">Manage your account preferences and security settings</p>
+      </header>
+
       <div className="settings-menu">
         <button
           className={`menu-item ${activeTab === 'account' ? 'active' : ''}`}
           onClick={() => setActiveTab('account')}
         >
-          Account Settings
+          <FiUser className="menu-icon" />
+          Profile
         </button>
         <button
           className={`menu-item ${activeTab === 'password' ? 'active' : ''}`}
           onClick={() => setActiveTab('password')}
         >
-          Change Password
+          <FiLock className="menu-icon" />
+          Security
         </button>
       </div>
+
       <div className="settings-content">
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
         {renderContent()}
       </div>
     </div>
