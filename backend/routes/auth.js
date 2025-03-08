@@ -42,7 +42,8 @@ router.post("/register", async (req, res) => {
     });
 
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 60 * 60 * 1000 * 7),
+     // expires: new Date(Date.now() + 60 * 60 * 1000 * 7),
+      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
@@ -74,7 +75,8 @@ router.post('/login', async (req, res) => {
     }
     const token = jwt.sign({ id: useri._id }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
     res.cookie('token', token, {
-      expires: new Date(Date.now() + 60 * 60 * 1000 * 7),
+      //expires: new Date(Date.now() + 60 * 60 * 1000 * 7),
+      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
