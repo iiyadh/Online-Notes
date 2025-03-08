@@ -39,9 +39,9 @@ router.put('/username', async (req, res) => {
         db.query('UPDATE users SET name = ? WHERE id = ?', [newUsername, req.session.user.id],(err2,result2)=>{
           req.session.user.username = newUsername;
           if(err2)res.status(400).json({message : "Message Error"});
-          res.status(200).json({message : "OK"});
+          res.status(200).json({message : "Username Updated Successfuly"});
         })
-      }
+      }else res.status(400).json({message : "Username Already Used"});
         
     });
 });

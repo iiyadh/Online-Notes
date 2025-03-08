@@ -50,8 +50,7 @@ const Login = () => {
       toast.success('Login successful');
       navigate('/dashboard');
     } catch (err) {
-      toast.error('Invalid credentials or server error');
-      console.error(err);
+      toast.error(err.response.data.error);
     }
   };
   
