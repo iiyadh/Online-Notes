@@ -7,7 +7,7 @@ import { useNotes } from "../../Context/NoteContext";
 const Editor = ({ isEditMode, setIsEditMode }) => {
   const { selectedNote, setSelectedNote, updateNote, addNote, deleteNote } = useNotes();
   const [isSaving, setIsSaving] = useState(false);
-  const [isAutoSave, setIsAutoSave] = useState(true); // Toggle for Auto-Save
+  const [isAutoSave, setIsAutoSave] = useState(false);
 
   const modules = {
     toolbar: [
@@ -22,36 +22,33 @@ const Editor = ({ isEditMode, setIsEditMode }) => {
     ],
   };
 
-  // Auto-Save when enabled
   useEffect(() => {
     if (!selectedNote || !isAutoSave) return;
 
-    const timeoutId = setTimeout(() => {
-      if (selectedNote.id) {
-        updateNote(selectedNote.id, selectedNote.title, selectedNote.content);
+    const timeoutId = setTimeout(async () => {
+      if (selectedNote._id) {
+        await updateNote(selectedNote._id, selectedNote.title, selectedNote.content);
       } else {
-        addNote(selectedNote.title, selectedNote.content);
+        await addNote(selectedNote.title, selectedNote.content);
       }
       setIsSaving(true);
-      setTimeout(() => setIsSaving(false), 1000); // Show "Saving..." briefly
-    }, 1000); // Auto-save delay
+      setTimeout(() => setIsSaving(false), 1000);
+    }, 1000);
 
     return () => clearTimeout(timeoutId);
   }, [selectedNote?.title, selectedNote?.content, isAutoSave]);
 
-  // Manual Save Function
   const handleSave = () => {
-    if (selectedNote.id) {
-      updateNote(selectedNote.id, selectedNote.title, selectedNote.content);
+    if (selectedNote._id) {
+      updateNote(selectedNote._id, selectedNote.title, selectedNote.content);
     } else {
       addNote(selectedNote.title, selectedNote.content);
     }
     setIsEditMode(false);
   };
 
-  // Delete Note
   const handleDelete = () => {
-    deleteNote(selectedNote.id);
+    deleteNote(selectedNote._id);
     setSelectedNote(null);
   };
 
@@ -74,9 +71,8 @@ const Editor = ({ isEditMode, setIsEditMode }) => {
         {isEditMode && !isAutoSave && (
           <button className="save-button alone" onClick={handleSave}>Save</button>
         )}
-
         {isEditMode && isAutoSave && (
-          <button className="edit-button alone" onClick={()=>setIsEditMode(false)}>Go Back</button>
+          <button className="edit-button alone" onClick={() => setIsEditMode(false)}>Go Back</button>
         )}
       </div>
 

@@ -5,6 +5,7 @@ import { useAuth } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Cookies from "js-cookie";
 
 const Login = () => {
   axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -21,7 +22,6 @@ const Login = () => {
       navigate('/dashboard');
     }
   }, [user, navigate]);
-  
   // ****** Don't use Internal implementation for the login make sure you use the context ********** //
 
   // const handleSubmit = async (e) => {
@@ -46,11 +46,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password); // Use the login function
+      await login(email, password);
       toast.success('Login successful');
+      saveCookie();
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response.data.error);
+      toast.error(err);
     }
   };
   

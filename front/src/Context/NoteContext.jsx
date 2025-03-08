@@ -4,11 +4,10 @@ import { useAuth } from "./AuthContext";
 
 const NoteContext = createContext();
 
-export  const NoteProvider = ({ children }) => {
-
+export const NoteProvider = ({ children }) => {
   axios.defaults.baseURL = import.meta.env.VITE_API_URL;
   axios.defaults.withCredentials = true;
-  
+
   const { user } = useAuth();
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
@@ -27,12 +26,13 @@ export  const NoteProvider = ({ children }) => {
   // Add a new note
   const addNote = async (title, content) => {
     try {
+      setSelectedNote(null);
       const res = await axios.post(`/notes`, {
         title,
         content,
         user_id: user.id,
       });
-      setNotes((prevNotes) => [{id:res.data.id ,title, content },...prevNotes,]);
+      setNotes([...notes, { _id: res.data.id, title, content }]);
     } catch (err) {
       console.error("Error adding note:", err.message);
     }
@@ -43,7 +43,7 @@ export  const NoteProvider = ({ children }) => {
     try {
       await axios.put(`/notes/${id}`, { title, content });
       setNotes((prevNotes) =>
-        prevNotes.map((note) => (note.id === id ? { ...note, title, content } : note))
+        prevNotes.map((note) => (note._id === id ? { ...note, title, content } : note))
       );
     } catch (err) {
       console.error("Error updating note:", err.message);
@@ -54,7 +54,7 @@ export  const NoteProvider = ({ children }) => {
   const deleteNote = async (id) => {
     try {
       await axios.delete(`/notes/${id}`);
-      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+      setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id)); // Use _id here
     } catch (err) {
       console.error("Error deleting note:", err.message);
     }

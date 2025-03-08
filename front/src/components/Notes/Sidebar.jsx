@@ -4,6 +4,7 @@ import { useNotes } from "../../Context/NoteContext";
 
 const Sidebar = ({ isEditMode }) => {
   const { notes, selectedNote, setSelectedNote, addNote } = useNotes();
+  console.log(notes);
   return (
     <div className="sidebar">
       <button
@@ -16,8 +17,8 @@ const Sidebar = ({ isEditMode }) => {
       <ul className={`note-list ${isEditMode ? "no-cursor" : ""}`}>
         {notes.map((note) => (
           <li
-            key={note.id}
-            className={`note-item ${selectedNote?.id === note.id ? "active" : ""}`}
+            key={note._id}
+            className={`note-item ${selectedNote?._id === note._id ? "active" : ""}`}
             onClick={() => setSelectedNote(note)}
           >
             {note.title || "Untitled Note"}

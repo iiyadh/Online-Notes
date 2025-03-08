@@ -28,6 +28,9 @@ const SettingsPage = () => {
     try {
       const response = await axios.put('/settings/username', { newUsername: username }, { withCredentials: true });
       toast.success(response.data.message);
+      setTimeout(() => {
+        window.location = `${window.location.origin.toString()}/dashboard`;
+      }, 1000);
     } catch (err) {
       toast.warn(err.response?.data?.message);
     }
@@ -53,6 +56,7 @@ const SettingsPage = () => {
         { withCredentials: true }
       );
       toast.success(response.data.message);
+      navigate("dashboard");
     } catch (err) {
       toast.warn(err.response?.data?.message);
     }
